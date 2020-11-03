@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Calculator</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        function CheckNum(num_name) {
+            num = num_name.value;
+            if (isNaN(num) == true || num == "") {
+                if (num_name.name == "firstnum") {
+                    var str = "Số thứ nhất"
+                }
+                else {
+                    var str = "Số thứ hai"
+                }
+                document.getElementById("warning").innerHTML = "Giá trị nhập ở ô " + str.italics() + " không phải là số<br>";
+                return false;
+            }
+            else {
+                document.getElementById("warning").innerHTML = "";
+                return true;
+            }
+        }
+
+        function Compute(frm) {
+            var sign = frm.sign.value;
+
+            flag_firstnum = CheckNum(frm.firstnum);
+            var warning = document.getElementById("warning").innerHTML;
+
+            flag_secondum = CheckNum(frm.secondnum);
+            warning += document.getElementById("warning").innerHTML;
+
+            if (sign == "") {
+                warning += "Phải chọn phép tính<br>";
+            }
+            else {
+                if (flag_firstnum == true && flag_secondum == true) {
+                    var firstnum = parseFloat(frm.firstnum.value);
+                    var secondnum = parseFloat(frm.secondnum.value);
+                    if (secondnum == 0 && sign == "divide") {
+                        warning += "Không hợp lệ. Division by zero"
+                    }
+                    else {
+                        frm.submit();
+                    }
+                }
+
+            }
+            document.getElementById("warning").innerHTML = warning;
+        }
+
+    </script>
+
+    <div class="container-fluid ml-0" style="width: 40%;">
+        <h2 mb-2>Bé tập tính</h2>
+        <form action="" class="p-3" method="POST">
+            <div class="row pb-1">
+                <div class="col-2 p-0 mr-2">
+                    Số thứ nhất
+                </div>
+                <div class="col p-0 d-flex">
+                    <input type="text" class="" name="firstnum" value="{{firstnum}}"
+                        onfocusout="CheckNum(this.form.firstnum)">
+                    <div class="d-flex mx-3">
+                        <div class="d-flex mx-1">
+                            <input type="radio" name="sign" value="plus" {{#if isChecked_plus}}checked{{/if}}>
+                            <div class="mx-1">Cộng</div>
+                        </div>
+                        <div class="d-flex mx-1">
+                            <input type="radio" name="sign" value="substract" {{#if isChecked_substract}}checked{{/if}}>
+                            <div class="mx-1">Trừ</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row pb-1">
+                <div class="col-2 p-0 mr-2">
+                    Số thứ hai
+                </div>
+                <div class="col p-0 d-flex">
+                    <input type="text" name="secondnum" value="{{secondnum}}"
+                        onfocusout="CheckNum(this.form.secondnum)">
+                    <div class="d-flex mx-3">
+                        <div class="d-flex mx-1">
+                            <input type="radio" name="sign" value="multiply" {{#if isChecked_multiply}}checked{{/if}}>
+                            <div class="mx-1">Nhân</div>
+                        </div>
+                        <div class="d-flex mx-1">
+                            <input type="radio" name="sign" value="divide" {{#if isChecked_divide}}checked{{/if}}>
+                            <div class="mx-1">Chia</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 p-0 mr-2">
+                    Kết quả
+                </div>
+                <div class="col p-0 d-flex">
+                    <input type="text" id="result" value="{{result}}">
+                    <button type="button" class="mx-3" onclick="Compute(this.form)">Tính</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2 p-0 mr-2">
+                    Thông báo
+                </div>
+                <div class="col text-danger p-0" id="warning">
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>
